@@ -1,0 +1,39 @@
+<!-- templates/quiz.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест 1</title>
+    <script>
+        var currentQuestion = 0;
+
+        function showQuestion(index) {
+            var questions = document.getElementsByClassName('question');
+            questions[currentQuestion].style.display = 'none';
+            currentQuestion = index;
+            questions[currentQuestion].style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+<h1>Тест 1</h1>
+<form method="post" action="{{ url_for('quiz') }}">
+    {% for i in range(0, questions|length) %}
+    <div class="question" {% if i != 0 %}style="display: none;"{% endif %}>
+        <p>{{ questions[i]['question'] }}</p>
+        <ul>
+            {% for j in range(0, questions[i]['answer']|length) %}
+            <li>
+                <label>
+                    <input type="radio" name="question_{{ i+1 }}" value="{{ j+1 }}">
+                    {{ questions[i]['answer'][j] }}
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="button" onclick="showQuestion({{ i+1 }})">Далі</button>
+    </div>
+    {% endfor %}
+    <input type="submit" value="Завершити тест">
+</form>
+</body>
+</html>
